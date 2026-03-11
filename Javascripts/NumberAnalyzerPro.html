@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Number Analyzer Pro</title>
+
+<style>
+.error{
+    border:2px solid red;
+}
+.msg{
+    color:red;
+    font-size:13px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Number Analyzer Pro</h1>
+
+<p>
+Start Number
+<input type="number" id="start">
+</p>
+
+<p>
+End Number
+<input type="number" id="end">
+</p>
+
+<button onclick="runProgram()">Submit</button>
+
+<div id="result"></div>
+
+<script>
+
+{% comment %} // Prime numbers
+function isPrime(n){
+    if (n <= 1) return false;
+
+    for (let i = 2; i <= Math.sqrt(n); i++){
+        if (n % i === 0) return false;
+    }
+
+    return true;
+}
+
+// Even numbers
+function isEven(n){
+    return n % 2 === 0;
+}
+
+// Odd numbers
+function isOdd(n){
+    return n % 2 !== 0;
+}
+
+// Sum
+function calculateSum(numbers){
+    return numbers.reduce((acc,n)=>acc+n,0);
+}
+
+// Average
+function calculateAverage(numbers){
+    return calculateSum(numbers) / numbers.length;
+}
+
+// Main program
+function runProgram(){
+
+    let start = parseInt(document.getElementById("start").value);
+    let end = parseInt(document.getElementById("end").value);
+    let result = document.getElementById("result");
+
+    if(isNaN(start) || isNaN(end)){
+        alert("❌ Please enter valid numbers");
+        return;
+    }
+
+    // Handle reverse range
+    if(start > end){
+        [start,end] = [end,start];
+    }
+
+    let numbers = [];
+    let primeNumbers = [];
+    let evenNumbers = [];
+    let oddNumbers = [];
+
+    for(let i=start;i<=end;i++){
+
+        numbers.push(i);
+
+        if(isPrime(i)) primeNumbers.push(i);
+        if(isEven(i)) evenNumbers.push(i);
+        if(isOdd(i)) oddNumbers.push(i);
+
+    }
+
+    let sum = calculateSum(numbers);
+    let avg = calculateAverage(numbers);
+    let max = Math.max(...numbers);
+    let min = Math.min(...numbers);
+
+    result.innerHTML =
+
+        "<b>All Numbers:</b> " + numbers.join(", ") + "<br><br>" +
+
+        "<b>Prime Numbers:</b> " + primeNumbers.join(", ") + "<br>" +
+
+        "<b>Even Numbers:</b> " + evenNumbers.join(", ") + "<br>" +
+
+        "<b>Odd Numbers:</b> " + oddNumbers.join(", ") + "<br><br>" +
+
+        "<b>Total Sum:</b> " + sum + "<br>" +
+
+        "<b>Average:</b> " + avg.toFixed(2) + "<br>" +
+
+        "<b>Max:</b> " + max + "<br>" +
+
+        "<b>Min:</b> " + min;
+
+}
+
+</script> {% endcomment %}
+
+<script>
+
+function isPrime(n){
+    if(n<=1) return false;
+    for(let i=2;i<=Math.sqrt(n);i++){
+        if(n%i===0) return false;
+    }
+    return true;
+}
+
+function runProgram(){
+
+let start = parseInt(document.getElementById("start").value);
+let end = parseInt(document.getElementById("end").value);
+
+if(start > end) [start,end] = [end,start];
+
+const numbers = Array.from({length:end-start+1},(_,i)=>start+i);
+
+const evenNumbers = numbers.filter(n=>n%2===0);
+const oddNumbers = numbers.filter(n=>n%2!==0);
+const primeNumbers = numbers.filter(isPrime);
+
+const sum = numbers.reduce((a,b)=>a+b,0);
+const average = sum / numbers.length;
+
+const max = Math.max(...numbers);
+const min = Math.min(...numbers);
+
+document.getElementById("result").innerHTML =
+
+"<b>All Numbers:</b> "+numbers.join(", ")+"<br><br>"+
+"<b>Prime Numbers:</b> "+primeNumbers.join(", ")+"<br>"+
+"<b>Even Numbers:</b> "+evenNumbers.join(", ")+"<br>"+
+"<b>Odd Numbers:</b> "+oddNumbers.join(", ")+"<br><br>"+
+"<b>Sum:</b> "+sum+"<br>"+
+"<b>Average:</b> "+average.toFixed(2)+"<br>"+
+"<b>Max:</b> "+max+"<br>"+
+"<b>Min:</b> "+min;
+
+}
+
+</script>
+
+</body>
+</html>

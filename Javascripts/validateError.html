@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mini Validation Framework</title>
+
+<style>
+.error{
+    border:2px solid red;
+}
+.msg{
+    color:red;
+    font-size:13px;
+}
+</style>
+
+</head>
+
+<body>
+
+<p>
+Start Number
+<input type="number" id="start">
+<span id="start_msg" class="msg"></span>
+</p>
+
+<p>
+End Number
+<input type="number" id="end">
+<span id="end_msg" class="msg"></span>
+</p>
+
+<button onclick="runProgram()">Submit</button>
+
+<div id="result"></div>
+
+<script>
+
+// -------- validation rules --------
+
+const rules = {
+    required : value => value !== "",
+    integer  : value => Number.isInteger(Number(value))
+};
+
+const messages = {
+    required : "Field cannot be empty",
+    integer  : "Only integer numbers allowed"
+};
+
+// -------- validation engine --------
+
+function validate(field, ruleList){
+
+    const input = document.getElementById(field);
+    const msg = document.getElementById(field + "_msg");
+
+    input.classList.remove("error");
+    msg.textContent = "";
+
+    let value = input.value;
+
+    for(let rule of ruleList){
+
+        if(!rules[rule](value)){
+
+            input.classList.add("error");
+            msg.textContent = messages[rule];
+            return false;
+
+        }
+
+    }
+
+    return true;
+}
+
+// -------- math formula --------
+
+function calculateMath(n){
+
+    let oddSum = n * n;
+    let evenSum = n * (n + 1);
+
+    return {
+        oddSum,
+        evenSum
+    };
+}
+
+// -------- main program --------
+
+function runProgram(){
+
+    let validStart = validate("start",["required","integer"]);
+    let validEnd = validate("end",["required","integer"]);
+
+    if(!validStart || !validEnd) return;
+
+    let start = parseInt(document.getElementById("start").value);
+    let end = parseInt(document.getElementById("end").value);
+
+    let result = document.getElementById("result");
+
+    let evenNumbers = [];
+    let oddNumbers = [];
+
+    let evenSum = 0;
+    let oddSum = 0;
+
+    for(let i = start; i <= end; i++){
+
+        if(i % 2 === 0){
+            evenNumbers.push(i);
+            evenSum += i;
+        }else{
+            oddNumbers.push(i);
+            oddSum += i;
+        }
+
+    }
+
+    // math formula using count
+    let n = evenNumbers.length;
+    let math = calculateMath(n);
+
+    result.innerHTML =
+        "<b>Even Numbers:</b> " + evenNumbers.join(", ") + "<br>" +
+        "<b>Odd Numbers:</b> " + oddNumbers.join(", ") + "<br><br>" +
+
+        "<b>Even Sum :</b> " + evenSum + "<br>" +
+        "<b>Odd Sum :</b> " + oddSum + "<br><br>" ;
+
+       
+
+}
+
+</script>
+
+</body>
+</html>

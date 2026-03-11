@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odd Even</title>
+</head>
+
+<body>
+
+<p>Start Number: <input type="number" id="start"></p>
+<p>End Number: <input type="number" id="end"></p>
+
+<button onclick="runProgram()">Show Result</button>
+
+<div id="result"></div>
+
+<script>
+
+// reusable function
+function getNumber(id){
+    return parseInt(document.getElementById(id).value);
+}
+
+// reusable even check
+function isEven(n){
+    return n % 2 === 0;
+}
+
+// reusable list function
+function listEvenNumbers(start, end){
+    let evenNumbers = [];
+    for(let i = start; i <= end; i++){
+        if(isEven(i)){
+            evenNumbers.push(i);
+        }
+    }
+    return evenNumbers;
+}
+
+// math formula functions
+function calculateMath(n){
+
+    let oddSum = n * n;
+    let evenSum = n * (n + 1);
+
+    return {
+        oddSum,
+        evenSum
+    };
+}
+
+// error handling for non-numeric input and decimal numbers is included in the main program
+function showError(message){
+    alert("❌ Error: " + message);
+}
+
+// main program
+function runProgram(){
+
+    let start = getNumber("start");
+    let end = getNumber("end");
+    let result = document.getElementById("result");
+
+    if(isNaN(start) || isNaN(end)){
+        result.innerHTML = "Please enter valid numbers.";
+        return;
+    }
+// input validation for decimal numbers
+    if (!Number.isInteger(start) || !Number.isInteger(end)) {
+    alert("Decimal numbers are not allowed. Please enter whole numbers only.");
+    return;
+    }
+
+    // support reverse range
+    if(start > end){
+        [start, end] = [end, start];
+    }
+
+    let evenNumbers = [];
+    let oddNumbers = [];
+    let evenSum = 0;
+    let oddSum = 0;
+
+    for(let i = start; i <= end; i++){
+
+        if(isEven(i)){
+            evenNumbers.push(i);
+            evenSum += i;
+        }else{
+            oddNumbers.push(i);
+            oddSum += i;
+        }
+
+    }
+
+    // math shortcut (based on count)
+    let count = evenNumbers.length;
+    let math = calculateMath(count);
+
+    result.innerHTML =
+        "<b>Even Numbers:</b> " + evenNumbers.join(", ") + "<br>" +
+        "<b>Odd Numbers:</b> " + oddNumbers.join(", ") + "<br><br>" +
+
+        "<b>Even Sum (Loop):</b> " + evenSum + "<br>" +
+        "<b>Odd Sum (Loop):</b> " + oddSum + "<br><br>" +
+
+        "<b>Even Sum Formula N(N+1):</b> " + math.evenSum + "<br>" +
+        "<b>Odd Sum Formula N²:</b> " + math.oddSum;
+
+}
+
+</script>
+
+</body>
+</html>
